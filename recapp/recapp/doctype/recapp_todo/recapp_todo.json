@@ -1,26 +1,43 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "hash",
- "creation": "2023-01-28 14:37:19.821151",
- "default_view": "List",
+ "creation": "2024-12-09 16:46:48.826541",
  "doctype": "DocType",
- "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
   "title",
   "sequence_id",
-  "column_break_rzht",
+  "note",
+  "column_break_xaja",
   "date",
   "link",
-  "section_break_vdag",
+  "completed",
+  "section_break_yqsl",
   "description"
  ],
  "fields": [
   {
    "fieldname": "title",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Title"
+  },
+  {
+   "fieldname": "column_break_xaja",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Today",
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Date"
+  },
+  {
+   "fieldname": "section_break_yqsl",
+   "fieldtype": "Section Break"
   },
   {
    "fieldname": "description",
@@ -28,23 +45,24 @@
    "label": "Description"
   },
   {
-   "fieldname": "column_break_rzht",
-   "fieldtype": "Column Break"
-  },
-  {
-   "default": "Today",
-   "fieldname": "date",
-   "fieldtype": "Date",
-   "label": "Date"
-  },
-  {
-   "fieldname": "section_break_vdag",
-   "fieldtype": "Section Break"
-  },
-  {
    "fieldname": "sequence_id",
    "fieldtype": "Int",
-   "label": "Sequence ID"
+   "in_list_view": 1,
+   "label": "Sequence Id"
+  },
+  {
+   "fieldname": "note",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Note",
+   "options": "Recapp Note"
+  },
+  {
+   "default": "0",
+   "fieldname": "completed",
+   "fieldtype": "Check",
+   "label": "Completed"
   },
   {
    "fieldname": "link",
@@ -54,11 +72,10 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-12-09 22:05:02.663029",
+ "modified": "2024-12-09 21:10:36.030334",
  "modified_by": "Administrator",
  "module": "Recapp",
- "name": "Recapp Note",
- "naming_rule": "Random",
+ "name": "Recapp ToDo",
  "owner": "Administrator",
  "permissions": [
   {
@@ -74,7 +91,7 @@
    "write": 1
   }
  ],
- "sort_field": "modified",
+ "sort_field": "creation",
  "sort_order": "DESC",
  "states": []
 }

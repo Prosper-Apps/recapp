@@ -1,19 +1,29 @@
 import { createListResource, createResource, dayjs } from 'frappe-ui'
 import { session } from './session'
 
-export let notes = createListResource({
-  doctype: 'Recapp Note',
-  fields: ['name', 'title', 'date', 'description', 'link', 'sequence_id'],
-  filters: [['owner', '=', session.user]],
-  cache: 'Recapp Notes',
+export let todos = createListResource({
+  doctype: 'Recapp ToDo',
+  fields: [
+    'name',
+    'title',
+    'link',
+    'date',
+    'description',
+    'sequence_id',
+    'completed',
+  ],
+  filters: [
+    ['owner', '=', session.user],
+    ['note', 'is', 'not set'],
+  ],
+  cache: 'Recapp ToDos',
   orderBy: 'sequence_id asc',
 })
 
-export function update_note_sequence(_notes) {
-  let docs = _notes.map((note, index) => ({
-    doctype: 'Recapp Note',
+export function update_todo_sequence(_todos) {
+  let docs = _todos.map((note, index) => ({
+    doctype: 'Recapp ToDo',
     docname: note.name,
-    date: note.date,
     sequence_id: index + 1,
     old_sequence_id: note.sequence_id,
   }))
