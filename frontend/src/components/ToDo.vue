@@ -9,13 +9,6 @@
           class="flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out"
         >
           <Button
-            class="p-0.5 text-gray-500"
-            icon="plus"
-            variant="ghosted"
-            @click="showAddTodoInput = true"
-            title="Click to add new todo"
-          />
-          <Button
             class="todo-drag-handle p-0.5"
             variant="ghosted"
             title="Drag to move"
@@ -25,7 +18,11 @@
         </div>
         <div class="flex flex-1 gap-2 max-w-xl" @click="">
           <div class="mt-[3px]">
-            <Checkbox v-model="todo.completed" class="p-0.5 text-gray-500" />
+            <Checkbox
+              v-model="todo.completed"
+              class="p-0.5 text-gray-500"
+              @change="markAsCompleted"
+            />
           </div>
           <div class="title-description">
             <div class="title-link flex items-center gap-2 h-7">
@@ -44,11 +41,11 @@
                   />
                 </a>
               </div>
-              <Button
+              <!-- <Button
                 v-if="todo.completed"
                 label="Move"
                 @click="() => moveToNote(todo)"
-              />
+              /> -->
             </div>
             <TextEditor
               v-if="todo.description && html2text(todo.description)"
@@ -58,11 +55,14 @@
             />
           </div>
         </div>
-        <div
-          class="flex items-center transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100"
-        >
+        <div class="flex gap-1 items-center">
           <Button
-            class="p-0.5 text-gray-500"
+            v-if="todo.completed"
+            label="Move"
+            @click="() => moveToNote(todo)"
+          />
+          <Button
+            class="p-0.5 text-gray-500 transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100"
             icon="x"
             variant="ghost"
             @click="deleteTodo(todo.name)"
@@ -71,12 +71,10 @@
         </div>
       </div>
     </div>
-    <AddToDo v-if="showAddTodoInput" v-model="showAddTodoInput" />
   </div>
   <UpdateToDoModal v-model="showUpdateToDoModal" :todo="todo" />
 </template>
 <script setup>
-import AddToDo from './AddToDo.vue'
 import UpdateToDoModal from './UpdateToDoModal.vue'
 import { FeatherIcon, Button, TextEditor, Checkbox, call } from 'frappe-ui'
 import { notes } from '../data/notes'
@@ -92,7 +90,17 @@ const props = defineProps({
 let dialog = inject('$dialog')
 
 const showUpdateToDoModal = ref(false)
-const showAddTodoInput = ref(false)
+
+function markAsCompleted() {
+  todos.setValue
+    .submit({
+      name: props.todo.name,
+      completed: props.todo.completed ? 1 : 0,
+    })
+    .then(() => {
+      todos.reload()
+    })
+}
 
 function deleteTodo(name) {
   dialog({
