@@ -15,7 +15,7 @@
         item-key="name"
         @end="update_todo_sequence(todos.data)"
       >
-        <template #item="{ element, index }">
+        <template #item="{ element }">
           <div class="group flex items-center py-2 last:mb-0 cursor-pointer">
             <ToDo :todo="element" />
           </div>
