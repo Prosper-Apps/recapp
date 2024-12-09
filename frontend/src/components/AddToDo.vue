@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-center gap-1 hover:bg-gray-50 p-1 rounded">
-    <div class="mt-[3px] ml-10">
+    <div class="mt-1 ml-10">
       <Checkbox class="p-0.5 text-gray-500" />
     </div>
     <TextInput
@@ -31,7 +31,6 @@ function addNewToDo(val) {
     .then(() => {
       todos.fetch()
       newTitle.value = ''
-      show.value = false
     })
 }
 

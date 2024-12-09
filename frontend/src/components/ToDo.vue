@@ -1,9 +1,6 @@
 <template>
   <div class="flex flex-col gap-4 flex-1">
-    <div
-      class="flex flex-col gap-2 flex-1 hover:bg-gray-50 p-1 rounded"
-      @dblclick.stop="showUpdateToDoModal = true"
-    >
+    <div class="flex flex-col gap-2 flex-1 hover:bg-gray-50 p-1 rounded">
       <div class="flex items-start justify-between gap-2">
         <div
           class="flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out"
@@ -16,9 +13,13 @@
             <DragIcon />
           </Button>
         </div>
-        <div class="flex flex-1 gap-2 max-w-xl" @click="">
-          <div class="mt-[3px]">
+        <div
+          class="flex flex-1 gap-3 max-w-xl"
+          @click="showUpdateToDoModal = true"
+        >
+          <div class="mt-[3.5px]">
             <Checkbox
+              @click.stop
               v-model="todo.completed"
               class="p-0.5 text-gray-500"
               @change="markAsCompleted"
@@ -41,11 +42,6 @@
                   />
                 </a>
               </div>
-              <!-- <Button
-                v-if="todo.completed"
-                label="Move"
-                @click="() => moveToNote(todo)"
-              /> -->
             </div>
             <TextEditor
               v-if="todo.description && html2text(todo.description)"
@@ -56,11 +52,7 @@
           </div>
         </div>
         <div class="flex gap-1 items-center">
-          <Button
-            v-if="todo.completed"
-            label="Move"
-            @click="() => moveToNote(todo)"
-          />
+          <Button v-if="todo.completed" label="Move" @click.stop="moveToNote" />
           <Button
             class="p-0.5 text-gray-500 transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100"
             icon="x"
@@ -125,12 +117,11 @@ function deleteTodo(name) {
   })
 }
 
-async function moveToNote(todo) {
+async function moveToNote() {
   let note = await call('frappe.client.insert', {
     doc: {
       doctype: 'Recapp Note',
-      title: todo.title,
-      date: new Date().toISOString().split('T')[0],
+      title: props.todo.title,
     },
   })
   notes.reload()
@@ -138,7 +129,7 @@ async function moveToNote(todo) {
   if (note.name) {
     await call('frappe.client.set_value', {
       doctype: 'Recapp ToDo',
-      name: todo.name,
+      name: props.todo.name,
       fieldname: 'note',
       value: note.name,
     })

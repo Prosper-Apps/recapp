@@ -1,39 +1,25 @@
 <template>
-  <div
-    v-if="notes.data?.length === 0"
-    class="flex flex-col gap-3 justify-center items-center h-full"
-  >
-    <div class="text-gray-500 text-xl">No notes found</div>
-    <Button
-      class="ml-2"
-      variant="solid"
-      label="Add Note"
-      @click="store.open_new_dialog"
+  <div class="flex flex-col flex-1 mx-6 sm:mx-20">
+    <draggable
+      v-model="notes.data"
+      handle=".note-drag-handle"
+      :animation="200"
+      easing="cubic-bezier(0.34, 1.56, 0.64, 1)"
+      item-key="name"
+      @end="update_note_sequence(notes.data)"
     >
-      <template #prefix>
-        <FeatherIcon name="plus" class="h-4 w-4" />
+      <template #item="{ element }">
+        <div class="group flex items-center py-2 last:mb-0 cursor-pointer">
+          <Note :note="element" />
+        </div>
       </template>
-    </Button>
+    </draggable>
+    <AddNote class="mx-6 my-2" />
   </div>
-  <draggable
-    v-else
-    v-model="notes.data"
-    handle=".note-drag-handle"
-    :animation="200"
-    easing="cubic-bezier(0.34, 1.56, 0.64, 1)"
-    item-key="name"
-    @end="update_note_sequence(notes.data)"
-  >
-    <template #item="{ element, index }">
-      <div class="group flex items-center py-2 last:mb-0 cursor-pointer">
-        <Note :note="element" />
-      </div>
-    </template>
-  </draggable>
 </template>
 
 <script setup>
-import { Button, FeatherIcon } from 'frappe-ui'
+import AddNote from '../components/AddNote.vue'
 import Note from '../components/Note.vue'
 import { update_note_sequence } from '../data/notes'
 import draggable from 'vuedraggable'
