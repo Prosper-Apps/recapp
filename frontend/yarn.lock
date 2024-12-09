@@ -1477,10 +1477,10 @@ dash-get@^1.0.2:
   resolved "https://registry.yarnpkg.com/dash-get/-/dash-get-1.0.2.tgz#4c9e9ad5ef04c4bf9d3c9a451f6f7997298dcc7c"
   integrity sha512-4FbVrHDwfOASx7uQVxeiCTo7ggSdYZbqs8lH+WU6ViypPlDbe9y6IP5VVUDQBv9DcnyaiPT5XT0UWHgJ64zLeQ==
 
-dayjs@^1.10.7:
-  version "1.11.7"
-  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.7.tgz#4b296922642f70999544d1144a2c25730fce63e2"
-  integrity sha512-+Yw9U6YO5TQohxLcIkrXBeY73WP3ejHWVvx8XCk3gxvQDCTEmS48ZrSZCKciI7Bhl/uCMyxYtE9UqRILmFphkQ==
+dayjs@^1.11.13:
+  version "1.11.13"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.13.tgz#92430b0139055c3ebb60150aa13e860a4b5a366c"
+  integrity sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==
 
 de-indent@^1.0.2:
   version "1.0.2"
@@ -1646,10 +1646,10 @@ fraction.js@^4.3.6:
   resolved "https://registry.yarnpkg.com/fraction.js/-/fraction.js-4.3.6.tgz#e9e3acec6c9a28cf7bc36cbe35eea4ceb2c5c92d"
   integrity sha512-n2aZ9tNfYDwaHhvFTkhFErqOMIb8uyzSQ+vGJBjZyanAKZVbGUQ1sngfk9FdkBw7G26O7AgNjLcecLffD1c7eg==
 
-frappe-ui@^0.1.67:
-  version "0.1.69"
-  resolved "https://registry.yarnpkg.com/frappe-ui/-/frappe-ui-0.1.69.tgz#bfc6d19dff97d2666c36da63f5de62f819539406"
-  integrity sha512-MKHYTcRvmccZwTYlIcmf4OCbJQH5eqKXsq3Cj2lbnmoWuuTh9m7T3AoRKEwOIlZ0mSGCH9yzaF2BINBXGpIJdQ==
+frappe-ui@^0.1.91:
+  version "0.1.91"
+  resolved "https://registry.yarnpkg.com/frappe-ui/-/frappe-ui-0.1.91.tgz#9ba5f3a4205d3154c604c70e0329a5a821e72511"
+  integrity sha512-FcV+WJuYrFaAQf6U8rsajmS6DC8jL04TBj20mPqzsNFmopeuRwWklYb6AH5HZv2ghYybyZ811+j1R33ZvQ1X6Q==
   dependencies:
     "@headlessui/vue" "^1.7.14"
     "@popperjs/core" "^2.11.2"
@@ -1673,6 +1673,7 @@ frappe-ui@^0.1.67:
     "@tiptap/suggestion" "^2.0.3"
     "@tiptap/vue-3" "^2.0.3"
     "@vueuse/core" "^10.4.1"
+    dayjs "^1.11.13"
     feather-icons "^4.28.0"
     idb-keyval "^6.2.0"
     prettier "^3.3.2"
@@ -1680,6 +1681,7 @@ frappe-ui@^0.1.67:
     showdown "^2.1.0"
     socket.io-client "^4.5.1"
     tippy.js "^6.3.7"
+    typescript "^5.0.2"
 
 fs.realpath@^1.0.0:
   version "1.0.0"
@@ -2583,6 +2585,11 @@ type-fest@^2.19.0:
   version "2.19.0"
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-2.19.0.tgz#88068015bb33036a598b952e55e9311a60fd3a9b"
   integrity sha512-RAH822pAdBgcNMAfWnCBU3CFZcfZ/i1eZjwFU/dsLKumyuuP3niueg2UAukXYF0E2AAoc82ZSSf9J0WQBinzHA==
+
+typescript@^5.0.2:
+  version "5.7.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.7.2.tgz#3169cf8c4c8a828cde53ba9ecb3d2b1d5dd67be6"
+  integrity sha512-i5t66RHxDvVN40HfDd1PsEThGNnlMCMT3jMUuoh9/0TaqWevNontacunWyN02LA9/fIbEWlcHZcgTKb9QoaLfg==
 
 uc.micro@^1.0.1, uc.micro@^1.0.5:
   version "1.0.6"

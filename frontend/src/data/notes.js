@@ -1,6 +1,5 @@
-import { createListResource, createResource } from 'frappe-ui'
+import { createListResource, createResource, dayjs } from 'frappe-ui'
 import { session } from './session'
-import { dayjs } from '../utils'
 
 export let notes = createListResource({
   doctype: 'Recapp Note',
@@ -33,7 +32,6 @@ export let notes = createListResource({
     return data
   },
 })
-
 
 export function update_note_sequence(_notes) {
   let docs = _notes.map((note, index) => ({

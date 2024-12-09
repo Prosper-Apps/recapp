@@ -3,7 +3,7 @@ import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { session } from './data/session'
 import { users } from './data/users'
-import { dayjs } from './utils'
+import { dayjs } from 'frappe-ui'
 
 export const useStore = defineStore('recapp-store', () => {
   const route = useRoute()

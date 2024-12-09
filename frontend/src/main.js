@@ -1,10 +1,9 @@
 import { createApp } from 'vue'
-import { FrappeUI, Button, setConfig, frappeRequest, initSocket } from 'frappe-ui'
+import { FrappeUI, Button, setConfig, frappeRequest, initSocket, dayjs } from 'frappe-ui'
 import router from './router'
 import App from './App.vue'
 import { createPinia } from "pinia";
 import './index.css'
-import { dayjs } from './utils'
 import { createDialog } from './utils/dialogs'
 
 setConfig('resourceFetcher', frappeRequest)
