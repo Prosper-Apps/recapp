@@ -4,7 +4,7 @@
       <div
         v-if="
           !store.hideEmptyDays ||
-          day.title == 'Sunday' ||
+          (day.title == 'Sunday' && !notes.data.length) ||
           (store.hideEmptyDays && day.notes.length)
         "
         class="flex-1 text-center text-gray-900 bg-gray-100 rounded-md text-xl py-1"
@@ -30,7 +30,7 @@
       <AddNote
         v-if="
           !store.hideEmptyDays ||
-          day.title == 'Sunday' ||
+          (day.title == 'Sunday' && !notes.data.length) ||
           (store.hideEmptyDays && day.notes.length)
         "
         class="pl-7 my-2"
