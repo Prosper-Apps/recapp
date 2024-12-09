@@ -18,30 +18,6 @@ export let todos = createListResource({
   ],
   cache: 'Recapp ToDos',
   orderBy: 'sequence_id asc',
-  transform: (data) => {
-    if (todos.filters.length === 3) {
-      data.sort((a, b) => {
-        if (a.date === b.date) {
-          return a.sequence_id - b.sequence_id
-        }
-        return a.date > b.date ? 1 : -1
-      })
-
-      let last_date = ''
-      let updated_todos = []
-      data.forEach((note, index) => {
-        let dayname = dayjs(note.date).format('dddd, DD ')
-        if (note.date !== last_date) {
-          updated_todos.push({ title: dayname, type: 'Weekly' })
-        }
-        last_date = note.date
-        updated_todos.push(note)
-      })
-
-      return updated_todos
-    }
-    return data
-  },
 })
 
 export function update_todo_sequence(_todos) {

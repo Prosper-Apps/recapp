@@ -1,68 +1,130 @@
 <template>
-  <div
-    v-if="notes.data?.length === 0"
-    class="flex flex-col gap-3 justify-center items-center h-full"
-  >
-    <div class="text-gray-500 text-xl">No notes found</div>
-    <Button
-      class="ml-2"
-      variant="solid"
-      label="Add Note"
-      @click="store.open_new_dialog"
-    >
-      <template #prefix>
-        <FeatherIcon name="plus" class="h-4 w-4" />
-      </template>
-    </Button>
-  </div>
-  <draggable
-    v-else
-    v-model="notes.data"
-    handle=".note-drag-handle"
-    :animation="200"
-    easing="cubic-bezier(0.34, 1.56, 0.64, 1)"
-    item-key="name"
-    @end="update_note_sequence(notes.data)"
-  >
-    <template #item="{ element }">
-      <div class="group flex items-center py-2 last:mb-0 cursor-pointer">
-        <Note v-if="element.type != 'Weekly'" :note="element" />
-        <div
-          v-else
-          class="flex-1 text-center text-gray-900 bg-gray-100 rounded-md text-xl mx-6 py-1"
-        >
-          {{ element.title }}
-        </div>
+  <div class="flex flex-col flex-1 mx-6 sm:mx-20">
+    <div v-for="day in notesbyDays" :key="day.title">
+      <div
+        class="flex-1 text-center text-gray-900 bg-gray-100 rounded-md text-xl py-1"
+      >
+        {{ day.title }}
       </div>
-    </template>
-  </draggable>
+      <draggable
+        :list="day.notes"
+        group="note"
+        handle=".note-drag-handle"
+        easing="cubic-bezier(0.34, 1.56, 0.64, 1)"
+        item-key="name"
+        :animation="200"
+        @end="rearrangeNotes"
+        :data-date="day.date"
+      >
+        <template #item="{ element }">
+          <div class="group flex items-center py-2 last:mb-0 cursor-pointer">
+            <Note :note="element" />
+          </div>
+        </template>
+      </draggable>
+      <AddNote class="pl-7 my-2" :date="day.date" />
+    </div>
+  </div>
 </template>
 
 <script setup>
-import { Button, FeatherIcon } from 'frappe-ui'
+import AddNote from '../components/AddNote.vue'
 import Note from '../components/Note.vue'
-import { update_note_sequence } from '../data/notes'
-import draggable from 'vuedraggable'
-import { inject, watch } from 'vue'
+import { update_note_sequence, notes } from '../data/notes'
 import { useStore } from '../store'
-import { notes } from '../data/notes'
 import { session } from '../data/session'
+import draggable from 'vuedraggable'
+import { inject, computed, watch } from 'vue'
 
 let dayjs = inject('$dayjs')
 let store = useStore()
 
+const startDate = computed(() => dayjs(store.today).startOf('week'))
+const endDate = computed(() => dayjs(store.today).endOf('week'))
+
 watch(
   () => store.today,
-  (new_val) => {
-    let start_date = dayjs(new_val).startOf('week').format('YYYY-MM-DD')
-    let end_date = dayjs(new_val).endOf('week').format('YYYY-MM-DD')
+  () => {
     notes.filters = [
-      ['date', '>=', start_date],
-      ['date', '<=', end_date],
+      ['date', '>=', startDate.value.format('YYYY-MM-DD')],
+      ['date', '<=', endDate.value.format('YYYY-MM-DD')],
       ['owner', '=', session.user],
     ]
     notes.fetch()
   },
   { immediate: true },
 )
+
+const notesbyDays = computed(() => {
+  let data = notes.data || []
+  data.sort((a, b) => {
+    if (a.date === b.date) {
+      return a.sequence_id - b.sequence_id
+    }
+    return a.date > b.date ? 1 : -1
+  })
+
+  data.forEach((note) => {
+    note.day = dayjs(note.date).format('dddd')
+  })
+
+  let _days = [
+    {
+      title: 'Sunday',
+      date: startDate.value.format('YYYY-MM-DD'),
+      notes: [],
+    },
+    {
+      title: 'Monday',
+      date: startDate.value.add(1, 'day').format('YYYY-MM-DD'),
+      notes: [],
+    },
+    {
+      title: 'Tuesday',
+      date: startDate.value.add(2, 'day').format('YYYY-MM-DD'),
+      notes: [],
+    },
+    {
+      title: 'Wednesday',
+      date: startDate.value.add(3, 'day').format('YYYY-MM-DD'),
+      notes: [],
+    },
+    {
+      title: 'Thursday',
+      date: startDate.value.add(4, 'day').format('YYYY-MM-DD'),
+      notes: [],
+    },
+    {
+      title: 'Friday',
+      date: startDate.value.add(5, 'day').format('YYYY-MM-DD'),
+      notes: [],
+    },
+    {
+      title: 'Saturday',
+      date: endDate.value.format('YYYY-MM-DD'),
+      notes: [],
+    },
+  ]
+
+  _days.forEach((day) => {
+    day.notes = data.filter((note) => note.day === day.title)
+  })
+
+  return _days
+})
+
+function rearrangeNotes() {
+  let notes = []
+  notesbyDays.value.forEach((day) => {
+    day.notes.forEach((note, index) => {
+      note.date = day.date
+      note.sequence_id = index + 1
+      notes.push(note)
+    })
+
+    notes = notes.concat(day.notes)
+  })
+
+  update_note_sequence(notes)
+}
 </script>

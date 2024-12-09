@@ -4,7 +4,6 @@
       <Checkbox class="p-0.5 text-gray-500" />
     </div>
     <TextInput
-      ref="inputRef"
       class="w-full [&>input]:border-0"
       variant="outline"
       v-model="newTitle"
@@ -17,10 +16,9 @@
 <script setup>
 import { TextInput, Checkbox } from 'frappe-ui'
 import { todos } from '../data/todos'
-import { ref, nextTick, onMounted } from 'vue'
+import { ref } from 'vue'
 
 const newTitle = ref('')
-const inputRef = ref(null)
 
 function addNewToDo(val) {
   todos.insert
@@ -33,10 +31,4 @@ function addNewToDo(val) {
       newTitle.value = ''
     })
 }
-
-onMounted(() =>
-  nextTick(() => {
-    inputRef.value.el.focus()
-  }),
-)
 </script>
