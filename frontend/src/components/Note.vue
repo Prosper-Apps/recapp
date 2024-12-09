@@ -3,16 +3,12 @@
     <div
       class="flex opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out"
     >
-      <Button
-        class="drag-handle p-0.5"
-        variant="ghosted"
-        title="Drag to move"
-      >
+      <Button class="drag-handle p-0.5" variant="ghosted" title="Drag to move">
         <DragIcon />
       </Button>
     </div>
     <div
-      class="flex flex-1 items-start gap-3 max-w-xl"
+      class="flex flex-1 items-start gap-3"
       @click="store.open_edit_dialog(note)"
       title="Click to update note"
     >
@@ -51,9 +47,16 @@
       class="transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100"
     >
       <Button
-        class="p-0.5 text-gray-500"
+        class="!p-0.5 !text-gray-500"
+        icon="copy"
+        variant="ghost"
+        @click="duplicate(note)"
+        title="Click to duplicate note"
+      />
+      <Button
+        class="!p-0.5 !text-gray-500"
         icon="x"
-        variant="ghosted"
+        variant="ghost"
         @click="delete_note(note.name)"
         title="Click to delete note"
       />
@@ -101,5 +104,19 @@ function delete_note(name) {
       },
     ],
   })
+}
+
+function duplicate(note) {
+  notes.insert
+    .submit({
+      title: note.title,
+      description: note.description,
+      date: note.date,
+      link: note.link,
+      sequence_id: notes.data.length + 1,
+    })
+    .then(() => {
+      notes.reload()
+    })
 }
 </script>

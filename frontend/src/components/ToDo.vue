@@ -13,10 +13,7 @@
             <DragIcon />
           </Button>
         </div>
-        <div
-          class="flex flex-1 gap-3 max-w-xl"
-          @click="showUpdateToDoModal = true"
-        >
+        <div class="flex flex-1 gap-3" @click="showUpdateToDoModal = true">
           <div class="mt-[3.5px]">
             <Checkbox
               @click.stop
@@ -51,10 +48,18 @@
             />
           </div>
         </div>
-        <div class="flex gap-1 items-center">
-          <Button v-if="todo.completed" label="Move" @click.stop="moveToNote" />
+        <div
+          class="transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100"
+        >
           <Button
-            class="p-0.5 text-gray-500 transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100"
+            class="!p-0.5 !text-gray-500"
+            icon="copy"
+            variant="ghost"
+            @click="duplicate(todo)"
+            title="Click to duplicate todo"
+          />
+          <Button
+            class="!p-0.5 !text-gray-500"
             icon="x"
             variant="ghost"
             @click="deleteTodo(todo.name)"
@@ -68,7 +73,7 @@
 </template>
 <script setup>
 import UpdateToDoModal from './UpdateToDoModal.vue'
-import { FeatherIcon, Button, TextEditor, Checkbox, call } from 'frappe-ui'
+import { FeatherIcon, Button, TextEditor, Checkbox } from 'frappe-ui'
 import { notes } from '../data/notes'
 import { todos } from '../data/todos'
 import DragIcon from './icons/DragIcon.vue'
@@ -117,23 +122,16 @@ function deleteTodo(name) {
   })
 }
 
-async function moveToNote() {
-  let note = await call('frappe.client.insert', {
-    doc: {
-      doctype: 'Recapp Note',
-      title: props.todo.title,
-    },
-  })
-  notes.reload()
-
-  if (note.name) {
-    await call('frappe.client.set_value', {
-      doctype: 'Recapp ToDo',
-      name: props.todo.name,
-      fieldname: 'note',
-      value: note.name,
+function duplicate(todo) {
+  todos.insert
+    .submit({
+      title: todo.title,
+      description: todo.description,
+      link: todo.link,
+      sequence_id: todos.data.length + 1,
     })
-    todos.reload()
-  }
+    .then(() => {
+      todos.reload()
+    })
 }
 </script>

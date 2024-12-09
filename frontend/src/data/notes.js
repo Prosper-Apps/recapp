@@ -28,6 +28,7 @@ export async function update_note_sequence(_notes, e) {
       sequence_id: note_index + 1,
     })
     note.name = _note.name
+    note.date = store.date
   }
   let docs = _notes.map((note, index) => ({
     doctype: 'Recapp Note',
@@ -40,7 +41,9 @@ export async function update_note_sequence(_notes, e) {
   docs = docs.filter((doc) => doc.sequence_id !== doc.old_sequence_id)
   docs.forEach((doc) => delete doc.old_sequence_id)
 
-  createResource({ url: 'frappe.client.bulk_update' }).submit({
+  await createResource({ url: 'frappe.client.bulk_update' }).submit({
     docs: JSON.stringify(docs),
   })
+
+  notes.reload()
 }

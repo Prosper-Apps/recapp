@@ -10,11 +10,6 @@ class RecappNote(Document):
         if self.is_new():
             self.set_sequence_id()
 
-    def on_trash(self):
-        todo_exists = frappe.db.exists("Recapp ToDo", {"note": self.name})
-        if todo_exists:
-            frappe.db.set_value("Recapp ToDo", todo_exists, "note", "")
-
     def set_sequence_id(self):
         sequence_id = frappe.get_all(
             "Recapp Note",

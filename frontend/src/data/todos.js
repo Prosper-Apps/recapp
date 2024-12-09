@@ -1,4 +1,4 @@
-import { createListResource, createResource, dayjs } from 'frappe-ui'
+import { createListResource, createResource } from 'frappe-ui'
 import { session } from './session'
 
 export let todos = createListResource({
@@ -12,10 +12,7 @@ export let todos = createListResource({
     'sequence_id',
     'completed',
   ],
-  filters: [
-    ['owner', '=', session.user],
-    ['note', 'is', 'not set'],
-  ],
+  filters: [['owner', '=', session.user]],
   cache: 'Recapp ToDos',
   orderBy: 'sequence_id asc',
 })
@@ -35,17 +32,19 @@ export async function update_todo_sequence(_todos, e) {
     })
     todo.name = _todo.name
   }
-  let docs = _todos.map((note, index) => ({
+  let docs = _todos.map((todo, index) => ({
     doctype: 'Recapp ToDo',
-    docname: note.name,
+    docname: todo.name,
     sequence_id: index + 1,
-    old_sequence_id: note.sequence_id,
+    old_sequence_id: todo.sequence_id,
   }))
 
   docs = docs.filter((doc) => doc.sequence_id !== doc.old_sequence_id)
   docs.forEach((doc) => delete doc.old_sequence_id)
 
-  createResource({ url: 'frappe.client.bulk_update' }).submit({
+  await createResource({ url: 'frappe.client.bulk_update' }).submit({
     docs: JSON.stringify(docs),
   })
+
+  todos.reload()
 }

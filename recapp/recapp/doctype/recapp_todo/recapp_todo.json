@@ -7,7 +7,6 @@
  "field_order": [
   "title",
   "sequence_id",
-  "note",
   "column_break_xaja",
   "date",
   "link",
@@ -51,14 +50,6 @@
    "label": "Sequence Id"
   },
   {
-   "fieldname": "note",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Note",
-   "options": "Recapp Note"
-  },
-  {
    "default": "0",
    "fieldname": "completed",
    "fieldtype": "Check",
@@ -72,7 +63,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-12-09 21:10:36.030334",
+ "modified": "2024-12-10 02:22:22.468976",
  "modified_by": "Administrator",
  "module": "Recapp",
  "name": "Recapp ToDo",
