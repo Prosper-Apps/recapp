@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, ref, watch } from 'vue'
+import { useStorage } from '@vueuse/core'
 import { useRoute, useRouter } from 'vue-router'
 import { session } from './data/session'
 import { users } from './data/users'
@@ -9,11 +10,14 @@ export const useStore = defineStore('recapp-store', () => {
   const route = useRoute()
   const router = useRouter()
 
+  const hideEmptyDays = useStorage('hideEmptyDays', false)
+  const hideToDo = useStorage('hideToDo', false)
+
   let date_format = ref('YYYY-MM-DD')
   let current_view = computed(() => route.name || 'Daily')
 
   let user = computed(() =>
-    users.data?.find((user) => user.name == session.user)
+    users.data?.find((user) => user.name == session.user),
   )
 
   let date = computed(() => {
@@ -93,6 +97,8 @@ export const useStore = defineStore('recapp-store', () => {
     edit_dailog_note,
     date_text,
     date_changed,
+    hideEmptyDays,
+    hideToDo,
     change_to_previous_date,
     change_to_next_date,
     open_new_dialog,

@@ -3,67 +3,73 @@
     class="sidebar flex justify-between gap-2 bg-gray-50 border-r p-2 relative"
     :style="{ width: `${sidebar_width}px` }"
   >
-    <div class="flex w-full flex-col gap-8">
-      <Dropdown :options="dropdownItems">
-        <template v-slot="{ open }">
-          <button
-            class="flex gap-2 p-2 items-center rounded-md duration-300 ease-in-out"
-            :class="open ? 'bg-white shadow-sm' : 'hover:bg-gray-200'"
-            :style="{ width: `${sidebar_width - 18}px` }"
-          >
-            <Logo class="w-8 h-8 p-1 rounded flex-shrink-0 bg-white" />
-            <div
-              class="flex flex-1 flex-col text-left duration-300 ease-in-out"
+    <div class="flex flex-col justify-between">
+      <div class="flex w-full flex-col gap-4">
+        <Dropdown :options="dropdownItems">
+          <template v-slot="{ open }">
+            <button
+              class="flex gap-2 p-2 items-center rounded-md duration-300 ease-in-out"
+              :class="open ? 'bg-white shadow-sm' : 'hover:bg-gray-200'"
+              :style="{ width: `${sidebar_width - 18}px` }"
             >
-              <div class="text-base font-medium text-gray-900 leading-none">
-                Recapp
+              <Logo class="w-8 h-8 p-1 rounded flex-shrink-0 bg-white" />
+              <div
+                class="flex flex-1 flex-col text-left duration-300 ease-in-out"
+              >
+                <div class="text-base font-medium text-gray-900 leading-none">
+                  Recapp
+                </div>
+                <div class="mt-1 text-sm text-gray-700 leading-none">
+                  {{ store.user?.full_name }}
+                </div>
               </div>
-              <div class="mt-1 text-sm text-gray-700 leading-none">
-                {{ store.user?.full_name }}
+              <div class="">
+                <FeatherIcon
+                  name="chevron-down"
+                  class="h-4 w-4"
+                  aria-hidden="true"
+                />
               </div>
-            </div>
-            <div class="">
-              <FeatherIcon
-                name="chevron-down"
-                class="h-4 w-4"
-                aria-hidden="true"
-              />
-            </div>
-          </button>
-        </template>
-      </Dropdown>
-      <div class="flex justify-between gap-2 px-2">
-        <DatePicker
-          v-model="store.date_changed"
-          placeholder="Select Date"
-          :formatValue="(val) => val.split('-').reverse().join('-')"
-        />
-        <Button class="text-sm" @click="store.date_changed = ''">
-          Today
-        </Button>
+            </button>
+          </template>
+        </Dropdown>
+        <div class="sidebar-menu flex flex-col gap-2 px-2">
+          <router-link
+            v-for="view in views"
+            class="flex items-center gap-2 px-2 py-1 rounded"
+            :class="
+              view.label == store.current_view
+                ? 'bg-white shadow-sm'
+                : 'hover:bg-gray-100'
+            "
+            :to="
+              '/' +
+              view.label.toLowerCase() +
+              (route.params.date ? '/' + route.params.date : '')
+            "
+          >
+            <span class="grid h-5 w-6 place-items-center flex-shrink-0">
+              <component :is="view.icon" class="h-4.5 w-4.5 text-gray-700" />
+            </span>
+            <span class="flex-shrink-0 text-base duration-300 ease-in-out">
+              {{ view.label }}
+            </span>
+          </router-link>
+        </div>
       </div>
-      <div class="sidebar-menu flex flex-col gap-2 px-2">
-        <router-link
-          v-for="view in views"
-          class="flex items-center gap-2 px-2 py-1 rounded"
-          :class="
-            view.label == store.current_view
-              ? 'bg-white shadow-sm'
-              : 'hover:bg-gray-100'
-          "
-          :to="
-            '/' +
-            view.label.toLowerCase() +
-            (route.params.date ? '/' + route.params.date : '')
-          "
-        >
-          <span class="grid h-5 w-6 place-items-center flex-shrink-0">
-            <component :is="view.icon" class="h-4.5 w-4.5 text-gray-700" />
-          </span>
-          <span class="flex-shrink-0 text-base duration-300 ease-in-out">
-            {{ view.label }}
-          </span>
-        </router-link>
+      <div class="flex flex-col gap-2">
+        <div class="flex justify-between gap-2">
+          <DatePicker
+            v-model="store.date_changed"
+            placeholder="Select Date"
+            :formatValue="(val) => val.split('-').reverse().join('-')"
+          />
+          <Button class="text-sm" @click="store.date_changed = ''">
+            Today
+          </Button>
+        </div>
+        <Switch v-model="store.hideEmptyDays" label="Hide empty days" />
+        <Switch v-model="store.hideToDo" label="Hide todo list" />
       </div>
     </div>
     <div
@@ -80,7 +86,8 @@ import DailyIcon from '../icons/DailyIcon.vue'
 import WeeklyIcon from '../icons/WeeklyIcon.vue'
 import { session } from '../data/session.js'
 import { useStore } from '../store.js'
-import { DatePicker, Dropdown, FeatherIcon } from 'frappe-ui'
+import { DatePicker, Dropdown, FeatherIcon, Switch } from 'frappe-ui'
+import { useStorage } from '@vueuse/core'
 import { useRoute } from 'vue-router'
 import { ref } from 'vue'
 
@@ -95,15 +102,14 @@ let dropdownItems = [
   },
 ]
 
-let sidebar_width = ref(parseInt(localStorage.getItem('sidebarWidth') || 256))
-let sidebar_resizing = ref(false)
+const sidebar_width = useStorage('sidebarWidth', 256)
+const sidebar_resizing = ref(false)
 
 function start_resize() {
   document.addEventListener('mousemove', resize)
   document.addEventListener('mouseup', () => {
     document.body.classList.remove('select-none')
     document.body.classList.remove('cursor-col-resize')
-    localStorage.setItem('sidebarWidth', sidebar_width.value)
     sidebar_resizing.value = false
     document.removeEventListener('mousemove', resize)
   })

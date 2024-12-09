@@ -2,6 +2,11 @@
   <div class="flex flex-col flex-1 mx-6 sm:mx-20">
     <div v-for="day in notesbyDays" :key="day.title">
       <div
+        v-if="
+          !store.hideEmptyDays ||
+          day.title == 'Sunday' ||
+          (store.hideEmptyDays && day.notes.length)
+        "
         class="flex-1 text-center text-gray-900 bg-gray-100 rounded-md text-xl py-1"
       >
         {{ day.title }}
@@ -22,7 +27,15 @@
           </div>
         </template>
       </draggable>
-      <AddNote class="pl-7 my-2" :date="day.date" />
+      <AddNote
+        v-if="
+          !store.hideEmptyDays ||
+          day.title == 'Sunday' ||
+          (store.hideEmptyDays && day.notes.length)
+        "
+        class="pl-7 my-2"
+        :date="day.date"
+      />
     </div>
   </div>
 </template>

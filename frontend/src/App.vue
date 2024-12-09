@@ -3,7 +3,7 @@
     <AppSidebar />
     <div class="main flex flex-1">
       <Notes />
-      <ToDos />
+      <ToDos v-show="!store.hideToDo" />
     </div>
   </div>
   <Dialogs />
