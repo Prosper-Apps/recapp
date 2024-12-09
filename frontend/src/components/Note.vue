@@ -47,7 +47,7 @@
         </div>
       </div>
       <TextEditor
-        v-if="html2text(note.description)"
+        v-if="note.description && html2text(note.description)"
         editor-class="prose-sm text-base text-gray-600"
         :content="note.description"
         :editable="false"

@@ -4,8 +4,15 @@
     class="flex flex-col gap-3 justify-center items-center h-full"
   >
     <div class="text-gray-500 text-xl">No notes found</div>
-    <Button class="ml-2" variant="solid" @click="store.open_new_dialog">
-      + Add Note
+    <Button
+      class="ml-2"
+      variant="solid"
+      label="Add Note"
+      @click="store.open_new_dialog"
+    >
+      <template #prefix>
+        <FeatherIcon name="plus" class="h-4 w-4" />
+      </template>
     </Button>
   </div>
   <draggable
@@ -26,7 +33,7 @@
 </template>
 
 <script setup>
-import { Button } from 'frappe-ui'
+import { Button, FeatherIcon } from 'frappe-ui'
 import Note from '../components/Note.vue'
 import { update_note_sequence } from '../data/notes'
 import draggable from 'vuedraggable'
