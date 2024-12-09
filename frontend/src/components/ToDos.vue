@@ -7,13 +7,15 @@
     </div>
     <div v-if="todos.data?.length" class="flex items-center">
       <draggable
-        v-model="todos.data"
+        :list="todos.data"
+        group="note"
         class="w-full mx-6"
-        handle=".todo-drag-handle"
+        handle=".drag-handle"
         :animation="200"
         easing="cubic-bezier(0.34, 1.56, 0.64, 1)"
         item-key="name"
-        @end="update_todo_sequence(todos.data)"
+        data-name="todo"
+        @change="(e) => update_todo_sequence(todos.data, e)"
       >
         <template #item="{ element }">
           <div class="group flex items-center py-2 last:mb-0 cursor-pointer">

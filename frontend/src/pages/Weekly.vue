@@ -14,12 +14,12 @@
       <draggable
         :list="day.notes"
         group="note"
-        handle=".note-drag-handle"
+        handle=".drag-handle"
         easing="cubic-bezier(0.34, 1.56, 0.64, 1)"
         item-key="name"
         :animation="200"
-        @end="rearrangeNotes"
-        :data-date="day.date"
+        @change="(e) => rearrangeNotes(e)"
+        data-name="weekly"
       >
         <template #item="{ element }">
           <div class="group flex items-center py-2 last:mb-0 cursor-pointer">
@@ -126,7 +126,7 @@ const notesbyDays = computed(() => {
   return _days
 })
 
-function rearrangeNotes() {
+function rearrangeNotes(e) {
   let notes = []
   notesbyDays.value.forEach((day) => {
     day.notes.forEach((note, index) => {
@@ -138,6 +138,6 @@ function rearrangeNotes() {
     notes = notes.concat(day.notes)
   })
 
-  update_note_sequence(notes)
+  update_note_sequence(notes, e)
 }
 </script>

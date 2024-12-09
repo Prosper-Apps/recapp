@@ -1,5 +1,6 @@
 import { createListResource, createResource, dayjs } from 'frappe-ui'
 import { session } from './session'
+import { useStore } from '../store'
 
 export let notes = createListResource({
   doctype: 'Recapp Note',
@@ -9,7 +10,25 @@ export let notes = createListResource({
   orderBy: 'sequence_id asc',
 })
 
-export function update_note_sequence(_notes) {
+export async function update_note_sequence(_notes, e) {
+  if (e.removed?.element) {
+    let note = e.removed.element
+    await notes.delete.submit(note.name)
+    return
+  } else if (e.added?.element) {
+    const store = useStore()
+    let todo = e.added.element
+    let note = _notes.find((note) => note.name === todo.name)
+    let note_index = _notes.indexOf(note)
+    let _note = await notes.insert.submit({
+      title: note.title,
+      description: note.description,
+      link: note.link,
+      date: store.date,
+      sequence_id: note_index + 1,
+    })
+    note.name = _note.name
+  }
   let docs = _notes.map((note, index) => ({
     doctype: 'Recapp Note',
     docname: note.name,

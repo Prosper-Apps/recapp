@@ -1,12 +1,14 @@
 <template>
   <div class="flex flex-col flex-1 mx-6 sm:mx-20">
     <draggable
-      v-model="notes.data"
-      handle=".note-drag-handle"
+      :list="notes.data"
+      group="note"
+      handle=".drag-handle"
       :animation="200"
       easing="cubic-bezier(0.34, 1.56, 0.64, 1)"
       item-key="name"
-      @end="update_note_sequence(notes.data)"
+      data-name="daily"
+      @change="(e) => update_note_sequence(notes.data, e)"
     >
       <template #item="{ element }">
         <div class="group flex items-center py-2 last:mb-0 cursor-pointer">

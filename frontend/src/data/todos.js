@@ -20,7 +20,21 @@ export let todos = createListResource({
   orderBy: 'sequence_id asc',
 })
 
-export function update_todo_sequence(_todos) {
+export async function update_todo_sequence(_todos, e) {
+  if (e.removed?.element) {
+    let todo = e.removed.element
+    await todos.delete.submit(todo.name)
+    return
+  } else if (e.added?.element) {
+    let todo = e.added.element
+    let _todo = await todos.insert.submit({
+      title: todo.title,
+      description: todo.description,
+      link: todo.link,
+      sequence_id: _todos.length + 1,
+    })
+    todo.name = _todo.name
+  }
   let docs = _todos.map((note, index) => ({
     doctype: 'Recapp ToDo',
     docname: note.name,

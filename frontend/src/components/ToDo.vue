@@ -6,7 +6,7 @@
           class="flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out"
         >
           <Button
-            class="todo-drag-handle p-0.5"
+            class="drag-handle p-0.5"
             variant="ghosted"
             title="Drag to move"
           >
