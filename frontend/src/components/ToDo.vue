@@ -23,7 +23,7 @@
             />
           </div>
           <div class="title-description">
-            <div class="title-link flex items-center gap-2 h-7">
+            <div class="title-link flex items-center gap-2 min-h-7">
               <div
                 class="text-lg leading-normal font-medium select-none"
                 :class="{ 'line-through': todo.completed }"
